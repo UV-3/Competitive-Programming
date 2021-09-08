@@ -1,0 +1,45 @@
+const int N= 2e5+5;
+
+int fact[N], invfact[N];
+
+int pow(int x, int n, int m){
+    int ans=1;
+    while(n>0){
+        if(n%2==1){
+            ans= (ans*x)%m;
+            n--;
+        }
+        else{
+            x= (x*x)%m;
+            n/=2;
+        }
+    }
+    return ans;
+}
+
+int MODINV(int x){
+    // fermat little theorem
+    return pow(x,mod-2,mod);
+}
+
+void preprocess(){
+    fact[0]=fact[1]=1;
+    for(int i=2;i<N;i++){
+        fact[i]= (fact[i-1] * i)%mod;
+    }
+    // (1/ x!)%mod  =  ((x!)-¹)%mod
+    invfact[N-1] =  MODINV(fact[N-1]);
+    for(int i=N-2;i>=0;i--){
+        invfact[i]=  ( invfact[i+1]  * (i+1) ) %mod;
+    }
+}
+
+int nCr(int n, int r){
+    if(n<r){
+        return 0;
+    }
+    int ans=fact[n];
+    ans = ( ans * invfact[n-r] )%mod;
+    ans = ( ans * invfact[r])%mod;
+    return ans;
+}
